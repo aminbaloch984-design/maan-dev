@@ -7,6 +7,9 @@ A premium, Gemini-powered AI assistant built with **Next.js**, **React**, and **
 ![Gemini](https://img.shields.io/badge/Google-Gemini-7C6CFF)
 ![License](https://img.shields.io/badge/Storage-Local--only-4ED6A2)
 
+**Live app:** https://maan-dev-rose.vercel.app  
+**Source:** https://github.com/aminbaloch984-design/maan-dev
+
 ## Features
 
 - **Streaming AI chat** powered by the Google Gemini API
