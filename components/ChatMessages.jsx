@@ -30,6 +30,7 @@ export default function ChatMessages({
   isGenerating,
   onCopied,
   onRegenerate,
+  onNotice,
 }) {
   const scrollRef = useRef(null);
   const stickToBottom = useRef(true);
@@ -80,6 +81,7 @@ export default function ChatMessages({
             isGenerating={isGenerating}
             onCopy={onCopied}
             onRegenerate={onRegenerate}
+            onNotice={onNotice}
           />
         ))}
       </div>

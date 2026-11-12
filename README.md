@@ -20,6 +20,8 @@ A premium, Gemini-powered AI assistant built with **Next.js**, **React**, and **
 - **Markdown rendering** with tables, lists, links, and blockquotes
 - **Code syntax highlighting** plus a copy button on every code block
 - **Copy any message** with one click
+- **Voice input** — dictate messages with your microphone (English and Urdu recognition)
+- **Spoken replies** — listen to any answer with one click, or auto-read every reply aloud
 - **English and Roman Urdu** support through the system prompt
 - **Dark and light themes** with system preference detection
 - **Responsive layout** with a mobile sidebar drawer
@@ -111,8 +113,11 @@ new-ai-next/
 │  ├─ NewAIApp.jsx           # App state, streaming client and chat history
 │  ├─ Overlays.jsx           # Rename, confirm and toast UI
 │  ├─ Sidebar.jsx            # Navigation, search and recent chats
+│  ├─ SpeechProvider.jsx     # Voice reply state and auto-read preference
 │  └─ WelcomeView.jsx        # Dashboard welcome and prompt cards
-├─ lib/utils.js              # IDs, dates, groups, clipboard and storage helpers
+├─ lib/
+│  ├─ speech.js              # Web Speech helpers, Markdown cleanup and chunking
+│  └─ utils.js               # IDs, dates, groups, clipboard and storage helpers
 ├─ .env.example
 ├─ jsconfig.json
 ├─ next.config.mjs
@@ -137,7 +142,7 @@ The API route returns clear, user-safe errors for missing keys, rate limits, saf
 
 ### Storage
 
-Conversations are saved under the local storage key `new-ai:chats:v1`. The selected theme is saved under `new-ai-theme`. Clearing browser data removes the history.
+Conversations are saved under the local storage key `new-ai:chats:v1`. The selected theme is saved under `new-ai-theme`. Voice preferences use `new-ai:auto-speak` and `new-ai:voice-lang`. Clearing browser data removes the history and these preferences.
 
 ## Deployment
 
@@ -158,3 +163,5 @@ The app is ready to deploy to any Next.js-compatible host. On Vercel:
 ## Browser support
 
 Modern versions of Chrome, Edge, Firefox, and Safari. Streaming responses and clipboard access work best on `localhost` or HTTPS.
+
+Voice input uses the Web Speech `SpeechRecognition` API (best support in Chrome, Edge, and Safari) and requires microphone permission plus HTTPS or `localhost`. Spoken replies use `SpeechSynthesis`, which works in all modern browsers; available voices depend on the operating system.

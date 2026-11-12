@@ -9,8 +9,10 @@ import {
   Sparkles,
   Square,
   UserRound,
+  Volume2,
 } from 'lucide-react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import { useSpeech } from '@/components/SpeechProvider';
 import { copyToClipboard, formatMessageTime } from '@/lib/utils';
 
 export default function MessageBubble({
@@ -19,13 +21,16 @@ export default function MessageBubble({
   isGenerating,
   onCopy,
   onRegenerate,
+  onNotice,
 }) {
   const [copied, setCopied] = useState(false);
   const resetTimer = useRef(null);
+  const speech = useSpeech();
   const isUser = message.role === 'user';
   const isStreaming = message.status === 'streaming';
   const isError = message.status === 'error';
   const isStopped = message.status === 'stopped';
+  const isSpeaking = speech.speakingId === message.id;
 
   useEffect(() => {
     return () => {
@@ -40,6 +45,21 @@ export default function MessageBubble({
     onCopy?.();
     if (resetTimer.current) clearTimeout(resetTimer.current);
     resetTimer.current = setTimeout(() => setCopied(false), 1800);
+  }
+
+  function handleSpeak() {
+    if (isSpeaking) {
+      speech.stop();
+      return;
+    }
+
+    const started = speech.speakMessage(message.id, message.content);
+    if (!started) {
+      onNotice?.(
+        'Voice replies are not supported in this browser. Try Chrome, Edge or Safari.',
+        'error'
+      );
+    }
   }
 
   if (isUser) {
@@ -165,6 +185,21 @@ export default function MessageBubble({
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
+            </button>
+
+            <button
+              type="button"
+              className={`message-action ${isSpeaking ? 'is-speaking' : ''}`}
+              onClick={handleSpeak}
+              aria-label={isSpeaking ? 'Stop reading response' : 'Read response aloud'}
+              aria-pressed={isSpeaking}
+            >
+              {isSpeaking ? (
+                <Square size={12} fill="currentColor" />
+              ) : (
+                <Volume2 size={14} />
+              )}
+              <span>{isSpeaking ? 'Stop' : 'Listen'}</span>
             </button>
 
             {isLastAssistant && !isError && (

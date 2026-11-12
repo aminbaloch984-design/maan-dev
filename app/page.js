@@ -1,5 +1,10 @@
 import NewAIApp from '@/components/NewAIApp';
+import { SpeechProvider } from '@/components/SpeechProvider';
 
 export default function Home() {
-  return <NewAIApp />;
+  return (
+    <SpeechProvider>
+      <NewAIApp />
+    </SpeechProvider>
+  );
 }

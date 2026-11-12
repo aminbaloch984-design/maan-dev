@@ -12,6 +12,7 @@ import ChatHeader from '@/components/ChatHeader';
 import WelcomeView from '@/components/WelcomeView';
 import ChatMessages from '@/components/ChatMessages';
 import Composer from '@/components/Composer';
+import { useSpeech } from '@/components/SpeechProvider';
 import {
   ConfirmDialog,
   RenameDialog,
@@ -26,6 +27,7 @@ import {
 } from '@/lib/utils';
 
 export default function NewAIApp() {
+  const { stop: stopSpeech, speakIfAuto } = useSpeech();
   const [conversations, setConversations] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [hydrated, setHydrated] = useState(false);
@@ -152,6 +154,7 @@ export default function NewAIApp() {
   const startNewChat = useCallback(() => {
     setSidebarOpen(false);
     setDraft('');
+    stopSpeech();
 
     if (activeRequestRef.current) {
       abortRef.current?.abort();
@@ -174,7 +177,7 @@ export default function NewAIApp() {
     setConversations((current) => [conversation, ...current]);
     setActiveId(conversation.id);
     focusComposer();
-  }, [activeConversation, focusComposer]);
+  }, [activeConversation, focusComposer, stopSpeech]);
 
   useEffect(() => {
     function handleShortcut(event) {
@@ -352,12 +355,18 @@ export default function NewAIApp() {
         abortRef.current = null;
         setIsGenerating(false);
       }
+
+      if (outcome === 'complete' && accumulated.trim()) {
+        speakIfAuto(assistantId, accumulated);
+      }
     }
   }
 
   function handleSend(rawText) {
     const text = rawText.trim();
     if (!text || isGenerating) return;
+
+    stopSpeech();
 
     const now = new Date().toISOString();
     const conversationId = activeConversation?.id || createId();
@@ -423,11 +432,14 @@ export default function NewAIApp() {
   }
 
   function handleStop() {
+    stopSpeech();
     abortRef.current?.abort();
   }
 
   function handleRegenerate(messageId) {
     if (isGenerating || !activeConversation) return;
+
+    stopSpeech();
 
     const index = activeConversation.messages.findIndex(
       (message) => message.id === messageId
@@ -484,6 +496,7 @@ export default function NewAIApp() {
     if (id !== activeId && activeRequestRef.current) {
       abortRef.current?.abort();
     }
+    stopSpeech();
     setActiveId(id);
     setSidebarOpen(false);
     setDraft('');
@@ -529,6 +542,7 @@ export default function NewAIApp() {
       (item) => item.id !== conversation.id
     );
 
+    stopSpeech();
     setConversations(remaining);
     if (activeId === conversation.id) {
       setActiveId(remaining[0]?.id || null);
@@ -546,6 +560,7 @@ export default function NewAIApp() {
       abortRef.current?.abort();
     }
 
+    stopSpeech();
     setConversations((current) =>
       current.map((item) =>
         item.id === conversation.id
@@ -614,6 +629,7 @@ export default function NewAIApp() {
             isGenerating={isGenerating}
             onCopied={() => showToast('Copied to clipboard')}
             onRegenerate={handleRegenerate}
+            onNotice={showToast}
           />
         )}
 
@@ -625,6 +641,7 @@ export default function NewAIApp() {
           isGenerating={isGenerating}
           inputRef={composerRef}
           model={modelName}
+          onNotice={showToast}
         />
       </main>
 
