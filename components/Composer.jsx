@@ -15,8 +15,6 @@ import {
   isSpeechSynthesisSupported,
 } from '@/lib/speech';
 
-const VOICE_LANG_KEY = 'new-ai:voice-lang';
-
 export default function Composer({
   value,
   onChange,
@@ -31,7 +29,7 @@ export default function Composer({
   const speech = useSpeech();
   const [listening, setListening] = useState(false);
   const [interim, setInterim] = useState('');
-  const [voiceLang, setVoiceLang] = useState('en-US');
+  const voiceLang = speech.voiceLang;
 
   const recognitionRef = useRef(null);
   const listeningRef = useRef(false);
@@ -53,15 +51,6 @@ export default function Composer({
   useEffect(() => {
     valueRef.current = value;
   }, [value]);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(VOICE_LANG_KEY);
-      if (saved === 'en-US' || saved === 'ur-PK') setVoiceLang(saved);
-    } catch {
-      // Fall back to English when storage is unavailable.
-    }
-  }, []);
 
   const stopListening = useCallback(() => {
     listeningRef.current = false;
@@ -200,12 +189,12 @@ export default function Composer({
 
   function changeVoiceLang(event) {
     const next = event.target.value;
-    setVoiceLang(next);
-    try {
-      localStorage.setItem(VOICE_LANG_KEY, next);
-    } catch {
-      // Preference stays in memory for this session.
-    }
+    speech.setVoiceLang(next);
+    onNotice?.(
+      next === 'ur-PK'
+        ? 'Urdu voice on — replies will be spoken in Urdu'
+        : 'English voice on'
+    );
   }
 
   function toggleVoiceReplies() {
@@ -297,8 +286,8 @@ export default function Composer({
                 className="voice-lang"
                 value={voiceLang}
                 onChange={changeVoiceLang}
-                aria-label="Voice input language"
-                title="Voice input language"
+                aria-label="Voice language"
+                title="Language for voice input and spoken replies"
                 disabled={listening || disabled}
               >
                 <option value="en-US">EN</option>

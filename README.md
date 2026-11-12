@@ -8,7 +8,8 @@ A premium, Gemini-powered AI assistant built with **Next.js**, **React**, and **
 ![License](https://img.shields.io/badge/Storage-Local--only-4ED6A2)
 
 **Live app:** https://maan-dev-rose.vercel.app  
-**Source:** https://github.com/aminbaloch984-design/maan-dev
+**Source:** https://github.com/aminbaloch984-design/maan-dev  
+**Created by:** Muhammad Nabeel
 
 ## Features
 
@@ -22,7 +23,10 @@ A premium, Gemini-powered AI assistant built with **Next.js**, **React**, and **
 - **Copy any message** with one click
 - **Voice input** — dictate messages with your microphone (English and Urdu recognition)
 - **Spoken replies** — listen to any answer with one click, or auto-read every reply aloud
+- **Clear Urdu voice** — Roman Urdu is converted to Urdu script and spoken with an online Urdu voice
+- **No reply length cap** — long answers are split into clips and played back to back
 - **English and Roman Urdu** support through the system prompt
+- **Knows its creator** — asks about its maker are answered with "Muhammad Nabeel"
 - **Dark and light themes** with system preference detection
 - **Responsive layout** with a mobile sidebar drawer
 - **Polished loading states**, message animations, typing indicators, and toasts
@@ -98,7 +102,8 @@ new-ai-next/
 ├─ app/
 │  ├─ api/
 │  │  ├─ chat/route.js       # Secure Gemini streaming proxy
-│  │  └─ status/route.js     # Reports whether an API key is configured
+│  │  ├─ status/route.js     # Reports whether an API key is configured
+│  │  └─ tts/route.js        # Urdu speech preparation and audio proxy
 │  ├─ globals.css            # Complete design system and responsive layout
 │  ├─ icon.svg               # App favicon
 │  ├─ layout.js              # Metadata, fonts, theme boot script
@@ -131,14 +136,17 @@ new-ai-next/
 3. Gemini's server-sent events are transformed into a small internal event stream and sent back to the browser.
 4. The client renders tokens as they arrive and stores the finished conversation in `localStorage`.
 
+For spoken replies, English answers use the browser's built-in voices. Roman Urdu answers are sent to `POST /api/tts`, converted to Urdu script with Gemini, and played through an online Urdu voice so the pronunciation stays clear even on devices without an Urdu system voice. Long answers are split into short clips and played in sequence, so reply length is not limited.
+
 The API route returns clear, user-safe errors for missing keys, rate limits, safety blocks, invalid models, network failures, and empty responses.
 
 ### Security notes
 
-- `GEMINI_API_KEY` is only accessed on the server inside `app/api/chat/route.js`.
+- `GEMINI_API_KEY` is only accessed on the server inside `app/api/chat/route.js` and `app/api/tts/route.js`.
 - The key is sent to Google using the `x-goog-api-key` header, never in a URL.
 - Input sizes and message counts are validated before calling Gemini.
 - Chat data never leaves the browser except as part of the AI request.
+- Urdu reply text is sent to Google's online voice service only when you press Listen or enable auto voice replies.
 
 ### Storage
 
@@ -157,6 +165,7 @@ The app is ready to deploy to any Next.js-compatible host. On Vercel:
 - **Accent colours and theme:** CSS variables at the top of `app/globals.css`.
 - **Welcome prompts:** `SUGGESTIONS` in `components/WelcomeView.jsx`.
 - **AI personality and language rules:** `SYSTEM_PROMPT` in `app/api/chat/route.js`.
+- **Creator name used in identity answers:** the `Identity` section of `SYSTEM_PROMPT`.
 - **Gemini model:** `GEMINI_MODEL` in `.env.local`.
 - **Response length:** `maxOutputTokens` in `app/api/chat/route.js`.
 
@@ -164,4 +173,4 @@ The app is ready to deploy to any Next.js-compatible host. On Vercel:
 
 Modern versions of Chrome, Edge, Firefox, and Safari. Streaming responses and clipboard access work best on `localhost` or HTTPS.
 
-Voice input uses the Web Speech `SpeechRecognition` API (best support in Chrome, Edge, and Safari) and requires microphone permission plus HTTPS or `localhost`. Spoken replies use `SpeechSynthesis`, which works in all modern browsers; available voices depend on the operating system.
+Voice input uses the Web Speech `SpeechRecognition` API (best support in Chrome, Edge, and Safari) and requires microphone permission plus HTTPS or `localhost`. English spoken replies use `SpeechSynthesis` and depend on the voices installed on your device. Urdu spoken replies use an online Urdu voice, so they sound clear even when no Urdu system voice is installed; an internet connection is required.

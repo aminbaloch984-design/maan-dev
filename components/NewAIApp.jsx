@@ -27,7 +27,7 @@ import {
 } from '@/lib/utils';
 
 export default function NewAIApp() {
-  const { stop: stopSpeech, speakIfAuto } = useSpeech();
+  const { stop: stopSpeech, speakIfAuto, registerNotifier } = useSpeech();
   const [conversations, setConversations] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [hydrated, setHydrated] = useState(false);
@@ -144,6 +144,11 @@ export default function NewAIApp() {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setToast(null), 2400);
   }, []);
+
+  useEffect(() => {
+    registerNotifier(showToast);
+    return () => registerNotifier(null);
+  }, [registerNotifier, showToast]);
 
   const focusComposer = useCallback(() => {
     requestAnimationFrame(() => {
