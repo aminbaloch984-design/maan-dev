@@ -2,22 +2,23 @@ import './globals.css';
 
 export const metadata = {
   title: {
-    default: 'NEW AI — Your intelligent workspace',
+    default: 'NEW AI — Mohammed Nabeel’s personal AI',
     template: '%s · NEW AI',
   },
   description:
-    'NEW AI is a premium AI assistant for coding, learning, business ideas, writing, and everyday questions. Powered by Google Gemini.',
+    'NEW AI is the personal AI assistant of Mohammed Nabeel — built for coding, learning, web development, Android apps and everyday questions. Powered by Google Gemini.',
   applicationName: 'NEW AI',
   keywords: [
     'NEW AI',
+    'Mohammed Nabeel',
     'AI assistant',
     'Gemini',
     'coding assistant',
     'AI chat',
   ],
-  authors: [{ name: 'NEW AI' }],
+  authors: [{ name: 'Mohammed Nabeel' }],
   openGraph: {
-    title: 'NEW AI — Your intelligent workspace',
+    title: 'NEW AI — Mohammed Nabeel’s personal AI',
     description:
       'Think faster, build smarter, and learn anything with NEW AI.',
     type: 'website',

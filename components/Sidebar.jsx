@@ -189,6 +189,14 @@ export default function Sidebar({
           <LockKeyhole size={12} />
           Chats are stored on this device
         </p>
+        <a
+          className="creator-credit"
+          href="https://aminbaloch984-design.github.io/nabeel-portfolio/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Built by Mohammed Nabeel
+        </a>
       </div>
     </aside>
   );

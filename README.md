@@ -9,7 +9,7 @@ A premium, Gemini-powered AI assistant built with **Next.js**, **React**, and **
 
 **Live app:** https://maan-dev-rose.vercel.app  
 **Source:** https://github.com/aminbaloch984-design/maan-dev  
-**Created by:** Muhammad Nabeel
+**Created by:** Mohammed Nabeel
 
 ## Features
 
@@ -26,11 +26,16 @@ A premium, Gemini-powered AI assistant built with **Next.js**, **React**, and **
 - **Clear Urdu voice** — Roman Urdu is converted to Urdu script and spoken with an online Urdu voice
 - **No reply length cap** — long answers are split into clips and played back to back
 - **English and Roman Urdu** support through the system prompt
-- **Knows its creator** — asks about its maker are answered with "Muhammad Nabeel"
+- **Knows its creator** — answers "who made you?" with "Mohammed Nabeel"
+- **Personal profile built in** — knows Nabeel's skills, projects, goals, devices and preferred Roman Urdu teaching style
 - **Dark and light themes** with system preference detection
 - **Responsive layout** with a mobile sidebar drawer
 - **Polished loading states**, message animations, typing indicators, and toasts
 - **Secure server-side API route** — the Gemini key is never sent to the browser
+
+## Personal profile
+
+NEW AI is tuned for Mohammed Nabeel. It replies in Roman Urdu by default, teaches in baby steps, and knows his skills, projects, goals, devices and contact links. Update the `SYSTEM_PROMPT` in `app/api/chat/route.js` to change these details.
 
 ## Tech stack
 

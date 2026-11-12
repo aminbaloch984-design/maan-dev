@@ -736,6 +736,20 @@ button.brand {
   font-size: 8.5px;
 }
 
+.creator-credit {
+  display: block;
+  margin-top: 5px;
+  color: var(--text-3);
+  font-size: 8.5px;
+  text-align: center;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.creator-credit:hover {
+  color: var(--accent);
+}
+
 .sidebar-backdrop {
   display: none;
 }

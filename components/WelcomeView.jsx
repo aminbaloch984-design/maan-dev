@@ -75,7 +75,7 @@ export default function WelcomeView({ onSelectPrompt, apiStatus }) {
 
           <div className="welcome-eyebrow">
             <span className="welcome-live-dot" />
-            Your private AI workspace
+            Mohammed Nabeel&apos;s private AI
           </div>
 
           <h1 id="welcome-heading" className="welcome-title">
@@ -84,8 +84,8 @@ export default function WelcomeView({ onSelectPrompt, apiStatus }) {
           </h1>
 
           <p className="welcome-subtitle">
-            Ask anything, write better code, or turn a rough idea into
-            something real. NEW AI is ready when you are.
+            Ask anything in Roman Urdu or English — code, websites, Android
+            apps, or a rough idea. NEW AI is ready when you are.
           </p>
         </div>
 
